@@ -1,11 +1,62 @@
-@import 'tailwindcss';
+/*
+|--------------------------------------------------------------------------
+| Archivo de Estilos Principal (Tailwind + Estilos de Tarjeta SÚPER-FORZADOS)
+|--------------------------------------------------------------------------
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/*
+ * =========================================
+ * ESTILOS DE TARJETA SÚPER-FORZADOS
+ * =========================================
+ */
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+body {
+    /* Fondo gris claro */
+    background-color: #f8f9fa !important;
+}
+
+/* 1. La tarjeta contenedora */
+.form-card, div.card { /* Incluimos form-card para asegurar compatibilidad */
+    border: none !important; 
+    border-radius: 0.75rem !important; 
+    background-color: #fff !important; 
+}
+
+/* 2. La sombra (Aumentar especificidad) */
+.form-card.shadow-lg, div.card.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+/* 3. El encabezado de la tarjeta */
+.form-card .card-header, div.card-header {
+    background-color: #fff !important; 
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important; 
+    padding: 1.5rem 1.5rem 1rem 1.5rem !important; 
+}
+
+/* 4. EL CUERPO DE LA TARJETA: CORRECCIÓN CRÍTICA CON MÁXIMA ESPECIFICIDAD */
+/* Usamos div.container para aumentar la especificidad al máximo y forzar el padding */
+div.container .form-card div.card-body.form-content-padding {
+    padding: 1.5rem !important; /* FORZAMOS EL RELLENO (p-6) */
+}
+
+
+/* Estilos de campos y botones (funcionan correctamente) */
+.form-label {
+    font-weight: 500 !important;
+}
+
+.form-control[readonly] {
+    background-color: #e9ecef !important; 
+    font-weight: 600 !important;
+    color: #007bff !important; 
+}
+
+.btn-primary {
+    /* ESTE ESTILO FUNCIONA */
+    background-color: #6f42c1 !important; 
+    border-color: #6f42c1 !important;
 }
