@@ -121,7 +121,7 @@ class EmployeeController extends Controller
             'direccion' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
             
-            'cargo' => 'required|string|max:100',
+            'job_title_id' => 'required|exists:job_titles,id',
             'salario_base' => 'required|numeric|min:0',
             'fecha_ingreso' => 'required|date',
         ]);

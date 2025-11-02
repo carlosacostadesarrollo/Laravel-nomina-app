@@ -5,7 +5,7 @@
     <div class="mt-5 md:mt-0 md:col-span-2">
         
         {{-- Título de la Vista --}}
-        <h1 class="text-3xl font-bold mb-6 text-gray-900">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900"> 
             Editar Contrato N° {{ $contract->numero_contrato ?? $contract->id }}
         </h1>
 
@@ -31,8 +31,8 @@
                 <div class="px-4 py-5 bg-white sm:p-6">
 
                     {{-- ===================================================================
-                       1. DATOS DE IDENTIFICACIÓN, CARGO Y SALARIO (Solo Lectura)
-                       =================================================================== --}}
+                        1. DATOS DE IDENTIFICACIÓN, CARGO Y SALARIO (Solo Lectura)
+                        =================================================================== --}}
                     <h2 class="text-xl font-semibold mb-4 text-indigo-600">
                         Datos de Identificación, Cargo y Salario
                     </h2>
@@ -78,13 +78,23 @@
                     <div class="my-6 border-t border-gray-200"></div>
 
                     {{-- ===================================================================
-                       2. VIGENCIA Y TIPO DE CONTRATO (Editables)
-                       =================================================================== --}}
+                        2. VIGENCIA Y TIPO DE CONTRATO (Editables)
+                        =================================================================== --}}
                     <h2 class="text-xl font-semibold mb-4 text-indigo-600">
                         Vigencia y Tipo de Contrato
                     </h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    {{-- CORRECCIÓN: Se agrega el campo numero_contrato --}}
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-6"> 
+                        
+                        {{-- Número de Contrato (NUEVO CAMPO REQUERIDO) --}}
+                        <div>
+                            <label for="numero_contrato" class="block text-sm font-medium text-gray-700">Número de Contrato *:</label>
+                            <input type="text" name="numero_contrato" id="numero_contrato" 
+                                value="{{ old('numero_contrato', $contract->numero_contrato) }}" 
+                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('numero_contrato') border-red-500 @enderror">
+                            @error('numero_contrato') <p class="text-sm text-red-600">{{ $message }}</p> @enderror
+                        </div>
 
                         {{-- Fecha de Inicio --}}
                         <div>
@@ -139,8 +149,8 @@
                     <div class="my-6 border-t border-gray-200"></div>
 
                     {{-- ===================================================================
-                       3. ACUERDOS Y DESCUENTOS (Editables)
-                       =================================================================== --}}
+                        3. ACUERDOS Y DESCUENTOS (Editables)
+                        =================================================================== --}}
                     <h2 class="text-xl font-semibold mb-4 text-indigo-600">
                         Acuerdos y Descuentos
                     </h2>
@@ -194,8 +204,8 @@
                     <div class="my-6 border-t border-gray-200"></div>
 
                     {{-- ===================================================================
-                       4. ENTIDADES DE RIESGO Y SALUD
-                       =================================================================== --}}
+                        4. ENTIDADES DE RIESGO Y SALUD
+                        =================================================================== --}}
                     <h2 class="text-xl font-semibold mb-4 text-indigo-600">
                         Entidades de Riesgo y Salud
                     </h2>
@@ -240,7 +250,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            {{-- CORRECCIÓN: Se agrega </p> y @enderror  --}}
+                            {{-- Corrección de sintaxis aquí --}}
                             @error('risk_level_id') <p class="text-sm text-red-600">{{ $message }}</p> @enderror 
                         </div>
 
@@ -262,8 +272,8 @@
                     <div class="my-6 border-t border-gray-200"></div>
                     
                     {{-- ===================================================================
-                       5. FONDOS DE AHORRO
-                       =================================================================== --}}
+                        5. FONDOS DE AHORRO
+                        =================================================================== --}}
                     <h2 class="text-xl font-semibold mb-4 text-indigo-600">
                         Fondos de Ahorro
                     </h2>
@@ -304,8 +314,8 @@
                 </div>
 
                 {{-- ===================================================================
-                   BOTÓN DE GUARDAR Y CANCELAR
-                   =================================================================== --}}
+                    BOTÓN DE GUARDAR Y CANCELAR
+                    =================================================================== --}}
                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <a href="{{ route('contracts.show', $contract) }}" class="inline-flex justify-center rounded-md border border-gray-300 py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-2">
                         Volver a los Detalles
@@ -318,4 +328,4 @@
         </form>
     </div>
 </div>
-@endsection                         
+@endsection

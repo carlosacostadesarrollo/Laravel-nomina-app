@@ -12,11 +12,7 @@
                     </a>
                 </div>
 
-                @if (session('success'))
-                    <div class="mb-4 p-4 bg-green-100 text-green-700 border border-green-400 rounded">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                
                 
                 @if ($employees->isEmpty())
                     <p>No hay empleados registrados. Por favor, añada uno.</p>

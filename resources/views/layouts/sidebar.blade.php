@@ -78,10 +78,10 @@
                     </x-nav-link>
                 </li>
                 <li>
-                    <x-nav-link :href="route('sindicatos.index')" :active="request()->routeIs('sindicatos.*')">
-                        <i class="fa-solid fa-handshake w-5 h-5 text-sm"></i>
-                        <span class="ml-2">Sindicatos</span>
-                    </x-nav-link>
+                      <x-nav-link :href="route('periodos_nomina.index')" :active="request()->routeIs('periodos_nomina.*')">
+                        <i class="fa-solid fa-calendar-days w-5 h-5 text-sm"></i>
+                        <span class="ml-2">Período Nómina</span>
+                      </x-nav-link>
                 </li>
                 <li>
                     <x-nav-link :href="route('embargos.index')" :active="request()->routeIs('embargos.*')">

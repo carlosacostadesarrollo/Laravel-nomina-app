@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\JobTitleController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\PeriodoNominaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,8 +38,12 @@ Route::middleware('auth')->group(function () {
     // Rutas de Cargos (Job Titles) - Excluir 'show' si no está implementado
     Route::resource('job_titles', JobTitleController::class)->except(['show']);
 
-    // 1. Sindicatos
-    Route::get('/sindicatos', function () { return view('placeholder.sindicatos_index'); })->name('sindicatos.index');
+    Route::resource('contracts', ContractController::class);
+
+    //----------------------------------------------------
+    // 1. Período Nómina 
+    // ----------------------------------------------------
+     Route::resource('periodos_nomina', PeriodoNominaController::class)->names('periodos_nomina');
     
     // 2. Empresas para Embargos
     Route::get('/embargos', function () { return view('placeholder.embargos_index'); })->name('embargos.index');

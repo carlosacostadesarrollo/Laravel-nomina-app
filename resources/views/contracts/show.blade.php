@@ -6,9 +6,16 @@
         Detalles del Contrato N° {{ $contract->numero_contrato ?? $contract->id }}
     </h1>
 
+    {{-- Mensaje de Error (Importante para mostrar si la eliminación falla por dependencias) --}}
+    @if (session('error'))
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            {!! session('error') !!}
+        </div>
+    @endif
+    
     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
         
-        {{-- Sección de Datos del Empleado --}}
+        {{-- Sección de Datos del Empleado (sin cambios aquí) --}}
         <div class="px-4 py-5 sm:px-6 bg-indigo-50">
             <h3 class="text-lg leading-6 font-medium text-indigo-600">
                 Información del Empleado
@@ -62,12 +69,27 @@
         </div>
         
         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-            <a href="{{ route('contracts.index') }}" class="inline-flex justify-center rounded-md border border-gray-300 py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            {{-- Botón Volver a la Lista --}}
+            <a href="{{ route('contracts.index') }}" class="inline-flex justify-center rounded-md border border-gray-300 py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3">
                 Volver a la Lista
             </a>
-            <a href="{{ route('contracts.edit', $contract) }}" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            
+            {{-- Botón Editar Contrato --}}
+            <a href="{{ route('contracts.edit', $contract) }}" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-3">
                 Editar Contrato
             </a>
+
+            {{-- FORMULARIO DE ELIMINACIÓN (DELETE) --}}
+            <form action="{{ route('contracts.destroy', $contract) }}" method="POST" class="inline-block"
+                  onsubmit="return confirm('¿Estás seguro de que deseas ELIMINAR permanentemente el contrato N° {{ $contract->numero_contrato }}?');">
+                
+                @csrf
+                @method('DELETE')
+                
+                <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Eliminar Contrato
+                </button>
+            </form>
         </div>
     </div>
 </div>

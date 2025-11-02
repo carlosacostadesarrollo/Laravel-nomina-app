@@ -1,21 +1,27 @@
 @extends('layouts.app') 
 
 @section('content')
-<div class="container">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <h1 class="text-3xl font-bold mb-4">Lista de Contratos</h1>
     
-    {{-- Botón con clases de diseño coherentes --}}
+    {{-- Botón Crear Nuevo Contrato --}}
     <a href="{{ route('contracts.create') }}" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mb-4">
         Crear Nuevo Contrato
     </a>
     
+    {{-- Mensajes Flash (Success o Error) --}}
     @if (session('success'))
         <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
             {{ session('success') }}
         </div>
+    @elseif (session('error'))
+        {{-- Muestra el mensaje de error de la función destroy (Dependencias) --}}
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            {!! session('error') !!} {{-- Usamos {!! !!} si el mensaje de error incluye HTML (como <strong>) --}}
+        </div>
     @endif
 
-    {{-- Estilos de tabla simples para mayor consistencia visual --}}
+    {{-- Tabla de Contratos --}}
     <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -34,39 +40,42 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                {{-- Asegúrate de pasar la variable $contracts desde el controlador --}}
                 @forelse($contracts as $contract)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $contract->id }}</td>
-                    {{-- Muestra el nombre completo usando la relación employee --}}
                     <td class="px-6 py-4 whitespace-nowrap">{{ $contract->employee->nombre ?? 'N/A' }} {{ $contract->employee->apellido ?? '' }}</td>
-                    {{-- Muestra el cargo usando la relación jobTitle --}}
                     <td class="px-6 py-4 whitespace-nowrap">{{ $contract->jobTitle->nombre ?? 'N/A' }}</td>
                     
-                    {{-- CORRECCIÓN DE SALARIO: Debe obtenerse del empleado o del contrato (si tiene campo salario) --}}
+                    {{-- Formato de Salario Consistente --}}
                     <td class="px-6 py-4 whitespace-nowrap">${{ number_format($contract->employee->salario_base ?? 0, 0, ',', '.') }}</td>
                     
                     <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($contract->fecha_inicio)->format('Y-m-d') }}</td>
-                    {{-- Muestra el tipo de contrato --}}
                     <td class="px-6 py-4 whitespace-nowrap">{{ $contract->contractType->nombre ?? 'N/A' }}</td>
                     
-                    {{-- Manejo de Nulos con el operador '??' --}}
-                    
-                    {{-- EPS: Si la relación es NULL, muestra 'N/A' --}}
+                    {{-- Manejo de Nulos (usando relaciones que asumimos existen en el modelo Contract) --}}
                     <td class="px-6 py-4 whitespace-nowrap">{{ $contract->eps->nombre ?? 'N/A' }}</td>
-                    
-                    {{-- CORRECCIÓN DE ARL: Usamos la relación arlEntity (basado en arl_entity_id) --}}
                     <td class="px-6 py-4 whitespace-nowrap">{{ $contract->arlEntity->nombre ?? 'N/A' }}</td>
-                    
-                    {{-- PENSIÓN: Si la relación es NULL, muestra "NO APLICA" --}}
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $contract->pensionFund->nombre ?? 'NO PAGA PENSIÓN' }}</td>
-                    
-                    {{-- CESANTÍAS: Si la relación es NULL, muestra "NO APLICA" --}}
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $contract->cesantiasFund->nombre ?? 'NO APLICA' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $contract->pensionFund->nombre ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $contract->cesantiasFund->nombre ?? 'N/A' }}</td>
                     
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {{-- Botón "Ver" actualizado para usar la ruta de Laravel --}}
-                        <a href="{{ route('contracts.show', $contract->id) }}" class="text-indigo-600 hover:text-indigo-900">Ver</a>
+                        {{-- Botón Ver --}}
+                        <a href="{{ route('contracts.show', $contract) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Ver</a>
+                        
+                        {{-- Botón Editar --}}
+                        <a href="{{ route('contracts.edit', $contract) }}" class="text-blue-600 hover:text-blue-900 mr-2">Editar</a>
+                        
+                        {{-- FORMULARIO DE ELIMINACIÓN (DELETE) --}}
+                        <form action="{{ route('contracts.destroy', $contract) }}" method="POST" class="inline-block" 
+                              onsubmit="return confirm('¿Confirmas que deseas eliminar el contrato N° {{ $contract->numero_contrato }}? \n\n¡Advertencia! Solo se podrá eliminar si no tiene pagos asociados.');">
+                            
+                            @csrf
+                            @method('DELETE')
+                            
+                            <button type="submit" class="text-red-600 hover:text-red-900 ml-1">
+                                Eliminar
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @empty
